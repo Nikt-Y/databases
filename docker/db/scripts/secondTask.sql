@@ -27,7 +27,7 @@ CREATE TABLE "Admission" (
   "ID" SERIAL PRIMARY KEY,
   "PatientID" int,
   "RoomID" int,
-  "From" date,
+  "From" timestamp,
   "To" date
 );
 
@@ -37,12 +37,12 @@ CREATE TABLE "Room" (
   "StationNr" int
 );
 
-CREATE TABLE "Station" (
+CREATE TABLE "Stationn" (
   "StationNr" SERIAL PRIMARY KEY,
   "Name" varchar
 );
 
-ALTER TABLE "StationPersonel" ADD FOREIGN KEY ("StationNr") REFERENCES "Station" ("StationNr");
+ALTER TABLE "StationPersonel" ADD FOREIGN KEY ("StationNr") REFERENCES "Stationn" ("StationNr");
 
 ALTER TABLE "Caregiver" ADD FOREIGN KEY ("PersNr") REFERENCES "StationPersonel" ("PersNr");
 
@@ -54,4 +54,4 @@ ALTER TABLE "Admission" ADD FOREIGN KEY ("PatientID") REFERENCES "Patient" ("Pat
 
 ALTER TABLE "Admission" ADD FOREIGN KEY ("RoomID") REFERENCES "Room" ("RoomNr");
 
-ALTER TABLE "Room" ADD FOREIGN KEY ("StationNr") REFERENCES "Station" ("StationNr");
+ALTER TABLE "Room" ADD FOREIGN KEY ("StationNr") REFERENCES "Stationn" ("StationNr");

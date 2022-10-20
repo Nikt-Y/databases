@@ -26,8 +26,8 @@ CREATE TABLE "Category" (
 );
 
 CREATE TABLE "Copy" (
-  "ISBN" int,
-  "CopyNumber" int,
+  "ISBN" int UNIQUE,
+  "CopyNumber" int UNIQUE,
   "ShelfPosition" int,
   PRIMARY KEY ("ISBN", "CopyNumber")
 );
@@ -36,8 +36,8 @@ CREATE TABLE "Borrowing" (
   "ReaderNr" int,
   "ISBN" int,
   "CopyNumber" int,
-  "ReturnDate" date,
-  PRIMARY KEY ("ISBN", "CopyNumber")
+  "ReturnDate" timestamp,
+  PRIMARY KEY ("ReaderNr", "ISBN", "CopyNumber")
 );
 
 CREATE TABLE "BookCat" (

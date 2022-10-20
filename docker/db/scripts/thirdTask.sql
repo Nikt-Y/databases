@@ -1,6 +1,6 @@
 CREATE TABLE "City" (
   "Name" varchar PRIMARY KEY,
-  "Region" varchar
+  "Region" varchar UNIQUE
 );
 
 CREATE TABLE "Station" (
@@ -21,8 +21,8 @@ CREATE TABLE "Connection" (
   "FromStation" varchar,
   "ToStation" varchar,
   "TrainNr" int,
-  "Departure" date,
-  "Arrival" date,
+  "Departure" timestamp,
+  "Arrival" timestamp,
   PRIMARY KEY ("TrainNr", "Departure")
 );
 
