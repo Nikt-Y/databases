@@ -1,50 +1,41 @@
-CREATE TABLE "train"
-(
-    "train_nr"      SERIAL PRIMARY KEY,
-    "length"        int,
-    "start_station" varchar,
-    "end_station"   varchar
+CREATE TABLE "City" (
+  "Name" varchar PRIMARY KEY,
+  "Region" varchar
 );
 
-CREATE TABLE "city"
-(
-    "region" varchar,
-    "name"   varchar,
-    PRIMARY KEY ("region", "name")
+CREATE TABLE "Station" (
+  "Name" varchar PRIMARY KEY,
+  "NumTracks" int,
+  "CityName" varchar,
+  "Region" varchar
 );
 
-CREATE TABLE "trainStation"
-(
-    "station_name" varchar PRIMARY KEY,
-    "track_num"    int,
-    "region"       varchar,
-    "city_name"    varchar
+CREATE TABLE "Train" (
+  "TrainNr" int PRIMARY KEY,
+  "Length" int,
+  "StartStationName" varchar,
+  "EndStationName" varchar
 );
 
-CREATE TABLE "connected"
-(
-    "id"                int PRIMARY KEY,
-    "departure"         timestamp,
-    "arrival"           timestamp,
-    "train_nr"          int,
-    "arrival_station"   varchar,
-    "departure_station" varchar
+CREATE TABLE "Connection" (
+  "FromStation" varchar,
+  "ToStation" varchar,
+  "TrainNr" int,
+  "Departure" date,
+  "Arrival" date,
+  PRIMARY KEY ("TrainNr", "Departure")
 );
 
-ALTER TABLE "train"
-    ADD FOREIGN KEY ("start_station") REFERENCES "trainStation" ("station_name");
+ALTER TABLE "Station" ADD FOREIGN KEY ("CityName") REFERENCES "City" ("Name");
 
-ALTER TABLE "train"
-    ADD FOREIGN KEY ("end_station") REFERENCES "trainStation" ("station_name");
+ALTER TABLE "Station" ADD FOREIGN KEY ("Region") REFERENCES "City" ("Region");
 
-ALTER TABLE "connected"
-    ADD FOREIGN KEY ("train_nr") REFERENCES "train" ("train_nr");
+ALTER TABLE "Train" ADD FOREIGN KEY ("StartStationName") REFERENCES "Station" ("Name");
 
-ALTER TABLE "connected"
-    ADD FOREIGN KEY ("arrival_station") REFERENCES "trainStation" ("station_name");
+ALTER TABLE "Train" ADD FOREIGN KEY ("EndStationName") REFERENCES "Station" ("Name");
 
-ALTER TABLE "connected"
-    ADD FOREIGN KEY ("departure_station") REFERENCES "trainStation" ("station_name");
+ALTER TABLE "Connection" ADD FOREIGN KEY ("FromStation") REFERENCES "Station" ("Name");
 
-ALTER TABLE "trainStation"
-    ADD FOREIGN KEY ("city_name", "region") REFERENCES "city" ("name", "region");
+ALTER TABLE "Connection" ADD FOREIGN KEY ("ToStation") REFERENCES "Station" ("Name");
+
+ALTER TABLE "Connection" ADD FOREIGN KEY ("TrainNr") REFERENCES "Train" ("TrainNr");

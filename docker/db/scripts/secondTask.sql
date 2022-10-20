@@ -1,52 +1,57 @@
-CREATE TABLE "stationPersonel" (
-  "pers_nr" SERIAL PRIMARY KEY,
-  "name_num" int,
-  "station" int
+CREATE TABLE "StationPersonel" (
+  "PersNr" SERIAL PRIMARY KEY,
+  "NameNum" int,
+  "StationNr" int
 );
 
-CREATE TABLE "caregiver" (
-  "pers_nr" SERIAL PRIMARY KEY,
-  "qualification" varchar
+CREATE TABLE "Caregiver" (
+  "PersNr" SERIAL PRIMARY KEY,
+  "Qualifications" varchar
 );
 
-CREATE TABLE "doctor" (
-  "pers_nr" SERIAL PRIMARY KEY,
-  "area" varchar,
-  "rank" varchar
+CREATE TABLE "Doctor" (
+  "ID" SERIAL PRIMARY KEY,
+  "PersNr" int,
+  "Area" varchar,
+  "Rank" varchar
 );
 
-CREATE TABLE "patient" (
-  "patient_nr" SERIAL PRIMARY KEY,
-  "name" varchar,
-  "disease" varchar,
-  "doctor" int
+CREATE TABLE "Patient" (
+  "PatientNr" SERIAL PRIMARY KEY,
+  "Name" varchar,
+  "Disease" varchar,
+  "DoctorID" int
 );
 
-CREATE TABLE "room" (
-  "room_nr" SERIAL PRIMARY KEY,
-  "beds_num" int,
-  "station" int
+CREATE TABLE "Admission" (
+  "ID" SERIAL PRIMARY KEY,
+  "PatientID" int,
+  "RoomID" int,
+  "From" date,
+  "To" date
 );
 
-CREATE TABLE "station" (
-  "stat_nr" SERIAL PRIMARY KEY,
-  "name" varchar
+CREATE TABLE "Room" (
+  "RoomNr" SERIAL PRIMARY KEY,
+  "BedsNum" int,
+  "StationNr" int
 );
 
-CREATE TABLE "admission" (
-  "id" SERIAL PRIMARY KEY,
-  "patient" int,
-  "room" int,
-  "from_date" timestamp,
-  "to_date" timestamp
+CREATE TABLE "Station" (
+  "StationNr" SERIAL PRIMARY KEY,
+  "Name" varchar
 );
 
-ALTER TABLE "stationPersonel" ADD FOREIGN KEY ("station") REFERENCES "station" ("stat_nr");
+ALTER TABLE "StationPersonel" ADD FOREIGN KEY ("StationNr") REFERENCES "Station" ("StationNr");
 
-ALTER TABLE "patient" ADD FOREIGN KEY ("doctor") REFERENCES "doctor" ("pers_nr");
+ALTER TABLE "Caregiver" ADD FOREIGN KEY ("PersNr") REFERENCES "StationPersonel" ("PersNr");
 
-ALTER TABLE "room" ADD FOREIGN KEY ("station") REFERENCES "station" ("stat_nr");
+ALTER TABLE "Doctor" ADD FOREIGN KEY ("PersNr") REFERENCES "StationPersonel" ("PersNr");
 
-ALTER TABLE "admission" ADD FOREIGN KEY ("patient") REFERENCES "patient" ("patient_nr");
+ALTER TABLE "Patient" ADD FOREIGN KEY ("DoctorID") REFERENCES "Doctor" ("ID");
 
-ALTER TABLE "admission" ADD FOREIGN KEY ("room") REFERENCES "room" ("room_nr");
+ALTER TABLE "Admission" ADD FOREIGN KEY ("PatientID") REFERENCES "Patient" ("PatientNr");
+
+ALTER TABLE "Admission" ADD FOREIGN KEY ("RoomID") REFERENCES "Room" ("RoomNr");
+
+ALTER TABLE "Room" ADD FOREIGN KEY ("StationNr") REFERENCES "Station" ("StationNr");

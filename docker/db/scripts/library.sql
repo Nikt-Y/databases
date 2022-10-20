@@ -1,67 +1,63 @@
-CREATE TABLE "book" (
+CREATE TABLE "Reader" (
+  "ID" SERIAL PRIMARY KEY,
+  "LastName" varchar,
+  "FirstName" varchar,
+  "Address" varchar,
+  "BirthDate" varchar
+);
+
+CREATE TABLE "Book" (
   "ISBN" int PRIMARY KEY,
-  "year" int,
-  "title" varchar,
-  "author" varchar,
-  "page_num" int,
-  "publisher" varchar
+  "Title" varchar,
+  "Author" varchar,
+  "PagesNum" int,
+  "PubYear" int,
+  "PubName" varchar
 );
 
-CREATE TABLE "publisher" (
-  "pub_name" varchar PRIMARY KEY,
-  "address" varchar
+CREATE TABLE "Publisher" (
+  "PubName" varchar PRIMARY KEY,
+  "PubAdress" varchar
 );
 
-CREATE TABLE "copy" (
-  "copy_num" int PRIMARY KEY,
+CREATE TABLE "Category" (
+  "CategoryName" varchar PRIMARY KEY,
+  "ParentCat" varchar
+);
+
+CREATE TABLE "Copy" (
   "ISBN" int,
-  "shelf_place" varchar
+  "CopyNumber" int,
+  "ShelfPosition" int,
+  PRIMARY KEY ("ISBN", "CopyNumber")
 );
 
-CREATE TABLE "reader" (
-  "reader_id" int PRIMARY KEY,
-  "address" varchar,
-  "birthday" timestamp,
-  "first_name" varchar,
-  "last_name" varchar
-);
-
-CREATE TABLE "category" (
-  "name" varchar PRIMARY KEY
-);
-
-CREATE TABLE "borrow" (
-  "id" SERIAL PRIMARY KEY,
-  "copy_num" int,
-  "reader_id" int,
-  "return_date" timestamp
-);
-
-CREATE TABLE "bookCategory" (
-  "id" SERIAL PRIMARY KEY,
+CREATE TABLE "Borrowing" (
+  "ReaderNr" int,
   "ISBN" int,
-  "name" varchar
+  "CopyNumber" int,
+  "ReturnDate" date,
+  PRIMARY KEY ("ISBN", "CopyNumber")
 );
 
-
-CREATE TABLE "categoryTree" (
-  "id" SERIAL PRIMARY KEY,
-  "child" varchar,
-  "parent" varchar
+CREATE TABLE "BookCat" (
+  "ISBN" int,
+  "CategoryName" varchar,
+  PRIMARY KEY ("ISBN", "CategoryName")
 );
 
-ALTER TABLE "book" ADD FOREIGN KEY ("publisher") REFERENCES "publisher" ("pub_name");
+ALTER TABLE "Copy" ADD FOREIGN KEY ("ISBN") REFERENCES "Book" ("ISBN");
 
-ALTER TABLE "copy" ADD FOREIGN KEY ("ISBN") REFERENCES "book" ("ISBN");
+ALTER TABLE "Book" ADD FOREIGN KEY ("PubName") REFERENCES "Publisher" ("PubName");
 
-ALTER TABLE "borrow" ADD FOREIGN KEY ("copy_num") REFERENCES "copy" ("copy_num");
+ALTER TABLE "Category" ADD FOREIGN KEY ("ParentCat") REFERENCES "Category" ("CategoryName");
 
-ALTER TABLE "borrow" ADD FOREIGN KEY ("reader_id") REFERENCES "reader" ("reader_id");
+ALTER TABLE "Borrowing" ADD FOREIGN KEY ("ReaderNr") REFERENCES "Reader" ("ID");
 
-ALTER TABLE "bookCategory" ADD FOREIGN KEY ("ISBN") REFERENCES "book" ("ISBN");
+ALTER TABLE "Borrowing" ADD FOREIGN KEY ("ISBN") REFERENCES "Copy" ("ISBN");
 
-ALTER TABLE "bookCategory" ADD FOREIGN KEY ("name") REFERENCES "category" ("name");
+ALTER TABLE "Borrowing" ADD FOREIGN KEY ("CopyNumber") REFERENCES "Copy" ("CopyNumber");
 
-ALTER TABLE "categoryTree" ADD FOREIGN KEY ("child") REFERENCES "category" ("name");
+ALTER TABLE "BookCat" ADD FOREIGN KEY ("ISBN") REFERENCES "Book" ("ISBN");
 
-ALTER TABLE "categoryTree" ADD FOREIGN KEY ("parent") REFERENCES "category" ("name");
+ALTER TABLE "BookCat" ADD FOREIGN KEY ("CategoryName") REFERENCES "Category" ("CategoryName");
